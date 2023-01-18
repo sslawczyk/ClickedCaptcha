@@ -1,0 +1,150 @@
+from flask import Flask, render_template, send_from_directory, redirect, request, jsonify, session, make_response
+import subprocess
+import templates
+import images_captcha
+import generated_captcha
+import os
+import random
+import clicked_captcha
+
+app = Flask(__name__)
+app.secret_key = "secret_key"
+
+@app.route("/")
+def home():
+    return "Hello, Flask!"
+
+@app.route("/captcha",methods=['GET','POST'])
+def captcha():
+    images = [f for f in os.listdir('images_captcha/') if f.endswith(".jpg")]
+    random.shuffle(images)
+    
+    return render_template("clicked_captcha_page.html",images=images)
+"""
+@app.route('/clicked_on_captcha', methods=['GET','POST'])
+def clicked_on_captcha():
+    clicks = session.get('clicks', 0) + 1
+    session['clicks'] = clicks
+    captcha_clicks = clicked_captcha.clicks
+    captcha_image = str(clicked_captcha.captcha_true_image)
+    if clicks >= int(captcha_clicks):
+        session.clear()
+        return redirect("/login")
+    return redirect(request.referrer)
+"""    
+@app.route('/images_captcha/<path:filename>')
+def images_captcha(filename):
+    return send_from_directory('images_captcha', filename, mimetype='image/jpg')
+
+@app.route('/generated_captcha/<path:filename>')
+def generated_captcha(filename):
+    return send_from_directory('generated_captcha', filename, mimetype='image/png')
+
+@app.route('/run_script', methods=['GET','POST'])
+def run_script():
+    session.clear()
+    subprocess.call(['python','clicked_captcha.py'])
+    return redirect('/captcha')
+
+if __name__ == '__main__':
+    
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+    <!DOCTYPE html>
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAPTCHA</title>
+  <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+  <div class="wrapper">
+    <header>Clicked Captcha</header>
+    <div class="captcha-area">Click on 
+      <div class="captcha-img">
+        <img src="{{ url_for('generated_captcha', filename='captcha.png') }}" alt="Captcha Background">
+        <span class="captcha"></span> 
+      </div> icon 
+        <img src="{{ url_for('generated_captcha', filename='captcha_number.png') }}" alt="Captcha Background"> times 
+    </div>
+    <div class="images">
+      {% for key, value in images %}
+        <form action="{{ url_for('clicked_on_captcha') }}" method="get">
+          <p>{{ key }}</p>
+          <p>{{ value }}</p>
+          <button><input type="image" src="{{ value }}" alt="{{ key }}" onclick="submitForm('{{ key }}')" height="100" width="100"></button>
+        </form> 
+        {% endfor %} 
+        <form action="{{ url_for('clicked_on_captcha') }}" method="get">
+          <button><input type="submit" value="here"></button>
+        </form>   
+    </div>
+    </form>
+      <form action="/run_script" method="post">
+        <input type="submit" value="refresh">
+      </form>
+    </div>
+    
+    </div>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAPTCHA</title>
+  <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+</head>
+<body>
+  <div class="wrapper">
+    <header>Clicked Captcha</header>
+    <div class="captcha-area">Click on 
+      <div class="captcha-img">
+        <img src="{{ url_for('generated_captcha', filename='captcha.png') }}" alt="Captcha Background">
+        <span class="captcha"></span> 
+      </div> icon 
+        <img src="{{ url_for('generated_captcha', filename='captcha_number.png') }}" alt="Captcha Background"> times 
+    </div>
+    <div class="images">
+      {% for key, value in images %}
+          <button><img src="{{ value }}" alt="{{ key }}" onclick="checkImage('{{ key }}')" width="100" height="100"></button>
+      {% endfor %}
+      <script>
+        function checkImage(image_name) {
+          fetch('/check_image/' + image_name)
+              .then(response => response.json())
+              .then(data => {
+                  if (data.message) {
+                      alert(data.message);
+                  }
+              });
+      }        
+      </script> 
+    </div>
+    </form>
+      <form action="/run_script" method="post">
+        <input type="submit" value="refresh">
+      </form>
+    </div>
+    
+    </div>
+</body>
+</html>
