@@ -6,7 +6,6 @@ import string
 from captcha.image import ImageCaptcha
 import captcha_dictionary
 
-
 word_images = {
     "cock": "static/images_captcha/1.jpg",
     "precel": "static/images_captcha/2.jpg",
@@ -19,8 +18,9 @@ word_images = {
 }
 
 #ilość kliknięć
+global clicks
 clicks = random.randint(2,9)
-
+global word
 word = random.choice(list(word_images))
 
 #określenie danych obrazów za pomocą frameworka captcha

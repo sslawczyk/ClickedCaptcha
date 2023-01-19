@@ -1,4 +1,4 @@
-{
+word_images = {
     "cock": "static/images_captcha/1.jpg",
     "precel": "static/images_captcha/2.jpg",
     "carrot": "static/images_captcha/3.jpg",
