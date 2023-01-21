@@ -33,13 +33,17 @@
 						<span class="txt1 p-b-9">
 							Are you a human?
 							<a href="{{ url_for('captcha')}}" class="btn btn-outline-success">VERIFY</a>
-						</span>
+						</span>				
 					</div>
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
 							Log in
 						</button>
 					</div>
+					<form action="{{ url_for('check') }}" method="post">
+						<input type="checkbox" name="checked" {{ 'checked' if checked else '' }}> Checked
+						<input type="submit" value="Check">
+					</form>		
 				</form>
 			</div>
 		</div>
@@ -47,4 +51,11 @@
 	</body>
 	{% block modal %}{% endblock %}
 {% block script%}{% endblock %}
+<script>
+$(document).on('click', function (e) {
+	if ($(e.target).is('.modal')) {
+	  e.preventDefault();
+	}
+});
+</script>
 </html>

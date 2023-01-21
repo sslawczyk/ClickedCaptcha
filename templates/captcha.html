@@ -7,14 +7,18 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">CLICKED CAPTCHA</h5>
+        <h5 class="modal-title">CLICKED CAPTCHA</h5>
       </div>
+      <div class="wrapper">
+        <div class="captca-area">
       <div class="modal-body">
-        <div class="captcha-area">Click on 
+        <div class="captcha-area">
+          <a>Click on</a>
           <div class="captcha-img">
             <img src="{{ url_for('generated_captcha', filename='captcha.png') }}" alt="Captcha Background">
             <span class="captcha"></span> 
-          </div> icon 
+          </div> 
+          <a>icon</a> 
             <img src="{{ url_for('generated_captcha', filename='captcha_number.png') }}" alt="Captcha Background"> times 
         </div>
         <div class="images">
@@ -43,8 +47,11 @@
       </div>
       <div class="modal-footer">
         <form action="/refresh" method="post">
-        <input type="submit" value="refresh"></form>
+          Images not displaying properly?
+        <button class="reload-button"><input type="submit" value="Refresh"></button></form>
       </div>
+    </div>
+    </div>
     </div>
   </div>
 </div>

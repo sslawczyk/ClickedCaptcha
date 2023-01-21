@@ -31,9 +31,9 @@ def captcha():
 def login():
     return "zalogowano"
 
-@app.route('/refresh')
+@app.route('/refresh', methods=['POST'])
 def refresh():
-    return redirect(url_for(login))
+    return redirect('/captcha')
 
 @app.route('/check_image/<image_name>')
 def check_image(image_name):
@@ -57,10 +57,10 @@ def images():
 def generated_captcha(filename):
     return send_from_directory('generated_captcha', filename, mimetype='image/png')
 
-@app.route('/run_script', methods=['GET','POST'])
-def run_script():
-    return redirect('/captcha')
     
+@app.route('/check', methods=['POST'])
+def check():
+    return redirect("/login", checked=True)
     
 def prepare_images():
     return random.sample(list(captcha_images_dictionary.items()), len(captcha_images_dictionary))
