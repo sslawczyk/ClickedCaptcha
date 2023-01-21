@@ -104,17 +104,3 @@ body{
   align-items: center;
   justify-content: center;
 }
-.captcha-popup-window{
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  top: 100px;
-  left: 100px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.05);
-  padding: 22px 30px 40px;
-}
-/* Hide the modal by default */
-/* Modal */
-
