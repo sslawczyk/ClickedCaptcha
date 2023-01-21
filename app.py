@@ -34,7 +34,7 @@ def captcha():
     print(str(session['captcha_image']))
     return render_template("captcha.html", images=images)
 
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 def login():
     return "zalogowano"
 
