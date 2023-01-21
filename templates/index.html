@@ -14,7 +14,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" onsubmit="return checkForm()">
 					<span class="login100-form-title">
 						Sign In
 					</span>
@@ -35,27 +35,32 @@
 							<a href="{{ url_for('captcha')}}" class="btn btn-outline-success">VERIFY</a>
 						</span>				
 					</div>
+					{% block form %}
+					<form action="{{ url_for('check') }}" method="post">
+						<input type="checkbox" id="checked" name="checked" value="true" {% if checked %}checked{%endif%} disabled> Verified
+					</form>
+					{% endblock %}
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
 							Log in
 						</button>
-					</div>
-					<form action="{{ url_for('check') }}" method="post">
-						<input type="checkbox" name="checked" {{ 'checked' if checked else '' }}> Checked
-						<input type="submit" value="Check">
-					</form>		
+					</div>									
 				</form>
 			</div>
 		</div>
 	</div>
 	</body>
 	{% block modal %}{% endblock %}
-{% block script%}{% endblock %}
+{% block script%}
 <script>
-$(document).on('click', function (e) {
-	if ($(e.target).is('.modal')) {
-	  e.preventDefault();
-	}
+$(document).ready(function(){
+    let checked = sessionStorage.getItem("checked")
+    if(checked === "true") {
+        document.getElementById("checked").checked = true;
+    }
+
+
 });
 </script>
+{% endblock %}
 </html>

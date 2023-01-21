@@ -1,6 +1,6 @@
 import random
 
-from flask import Flask, render_template, send_from_directory, redirect, jsonify, session, url_for
+from flask import Flask, render_template, send_from_directory, redirect, jsonify, session, url_for, request
 from flask import Response
 
 import captcha_dictionary
@@ -14,7 +14,14 @@ user_clicks = 0
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    checked = session.get('checked')
+    return render_template('index.html', checked=checked)
+
+@app.route('/check', methods=['POST'])
+def check():
+    checked = request.form.get("checked", False)
+    session['checked'] = checked
+    return redirect("/login", checked=True)
 
 @app.route("/captcha")
 def captcha():
@@ -56,11 +63,6 @@ def images():
 @app.route('/generated_captcha/<path:filename>')
 def generated_captcha(filename):
     return send_from_directory('generated_captcha', filename, mimetype='image/png')
-
-    
-@app.route('/check', methods=['POST'])
-def check():
-    return redirect("/login", checked=True)
     
 def prepare_images():
     return random.sample(list(captcha_images_dictionary.items()), len(captcha_images_dictionary))

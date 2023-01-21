@@ -1,9 +1,7 @@
 {% extends 'index.html' %}
 {% block modal %}
-
 <body>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -25,24 +23,6 @@
           {% for key, value in images %}
               <button><img src="{{ value }}" alt="{{ key }}" onclick="checkImage('{{ key }}')" width="100" height="100"></button>
           {% endfor %}
-          <script>
-            function checkImage(image_name) {
-              fetch('/check_image/' + image_name)
-              .then(response => {
-                  switch (response.status){
-                  case 200:
-                        alert("You are human!");
-                        window.location.href = '/login';
-                        break;
-                  case 201:
-                        break;
-                  default:
-                        alert("Wrong! Try again");
-                        window.location.href = '/captcha';
-                  }
-                 })
-                }    
-          </script> 
         </div>
       </div>
       <div class="modal-footer">
@@ -63,5 +43,25 @@ $(document).ready(function(){
   console.log("window is loaded")
   $("#exampleModal").modal("show")
 })
+
+function checkImage(image_name) {
+  fetch('/check_image/' + image_name)
+  .then(response => {
+      switch (response.status){
+      case 200:
+        alert("You are human!");
+        document.getElementById("checked").checked = true;
+        sessionStorage.setItem("checked", true);
+        $("#exampleModal").modal("hide");
+        window.location.href = '/';
+        break;
+      case 201:
+            break;
+      default:
+            alert("Wrong! Try again");
+            window.location.href = '/captcha';
+      }
+     })
+    }  
 </script>
 {% endblock %}
