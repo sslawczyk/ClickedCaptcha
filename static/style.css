@@ -116,9 +116,6 @@ body{
 .modal-dialog{
   text-align: center;
 }
-.modal-header .modal-title{
-  text-align: right;
-}
 
 .modal-content{
   text-align: center;
